@@ -1,5 +1,7 @@
 package villagegaulois;
 
+import java.util.Iterator;
+
 import personnages.Chef;
 import personnages.Gaulois;
 
@@ -60,7 +62,7 @@ public class Village {
 				if (etal.isEtalOccupe()) System.out.println(etal.afficherEtal());
 				else nbEtalLibre++;
 			}
-			System.out.println("Il reste " + nbEtalLibre + " étals non utilisés dans le marché.");
+			System.out.println("Il reste " + nbEtalLibre + " ï¿½tals non utilisï¿½s dans le marchï¿½.");
 		}
 	}
 	
@@ -70,13 +72,27 @@ public class Village {
 		
 		int noEtalLibre = marche.trouverEtalLibre();
 		if (noEtalLibre==-1) {
-			chaine.append("Il n'y a plus d'étal libre.\n");
+			chaine.append("Il n'y a plus d'ï¿½tal libre.\n");
 			return chaine.toString();
 		} else {
 			marche.utiliserEtal(noEtalLibre, vendeur, produit, nbProduit);
-			chaine.append("Le vendeur " + vendeur.getNom() + " vend des " + produit + " à l'étal n°" + (noEtalLibre+1) + ".\n");
+			chaine.append("Le vendeur " + vendeur.getNom() + " vend des " + produit + " ï¿½ l'ï¿½tal nï¿½" + (noEtalLibre+1) + ".\n");
 			return chaine.toString();
 		}
+	}
+	
+	public String rechercherVendeursProduit(String produit) {
+		StringBuilder chaine = new StringBuilder();
+		Etal[] etalsAvecProduit = marche.trouverEtals(produit);
+		System.out.println(etalsAvecProduit);
+		if (etalsAvecProduit[0]==null) chaine.append("Il n'y a pas de vendeur qui propose des " + produit + "\n");
+		else {
+			chaine.append("Les vendeurs qui proposent des " + produit +" sont :\n");
+			for (Etal etal : etalsAvecProduit) {
+				if (etal!=null) chaine.append("- " + etal.getVendeur().getNom() + "\n");
+			}
+		}
+		return chaine.toString();
 	}
 	
 	
