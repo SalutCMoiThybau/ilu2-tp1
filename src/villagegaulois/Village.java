@@ -1,5 +1,7 @@
 package villagegaulois;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import personnages.Chef;
@@ -40,12 +42,18 @@ public class Village {
 		}
 		
 		public Etal[] trouverEtals(String produit) {
-			Etal[] e = new Etal[etals.length];
-			for (int i=0; i<e.length; i++) {
+			Etal[] temp = new Etal[etals.length];
+			int len = 0;
+			for (int i=0; i<temp.length; i++) {
 				Etal etal = etals[i];
-				if (etal.isEtalOccupe() && etal.contientProduit(produit)) e[i] = etal;
+				if (etal.isEtalOccupe() && etal.contientProduit(produit)) {
+					temp[i] = etal;
+					len++;
+				}
 			}
-			return e;
+//			System.arraycopy(temp, 0, temp, 0, len);
+//			System.out.println(temp.length);
+			return temp;
 		}
 		
 		public Etal trouverVendeur(Gaulois gaulois) {
@@ -56,13 +64,15 @@ public class Village {
 			return null;
 		}
 		
-		public void afficherMarche() {
+		public String afficherMarche() {
+			StringBuilder chaine = new StringBuilder();
 			int nbEtalLibre = 0;
 			for (Etal etal : etals) {
-				if (etal.isEtalOccupe()) System.out.println(etal.afficherEtal());
+				if (etal.isEtalOccupe()) chaine.append(etal.afficherEtal());
 				else nbEtalLibre++;
 			}
-			System.out.println("Il reste " + nbEtalLibre + " �tals non utilis�s dans le march�.");
+			chaine.append("Il reste " + nbEtalLibre + " étals non utilisés dans le marché.");
+			return chaine.toString();
 		}
 	}
 	
@@ -72,7 +82,7 @@ public class Village {
 		
 		int noEtalLibre = marche.trouverEtalLibre();
 		if (noEtalLibre==-1) {
-			chaine.append("Il n'y a plus d'�tal libre.\n");
+			chaine.append("Il n'y a plus d'étal libre.\n");
 			return chaine.toString();
 		} else {
 			marche.utiliserEtal(noEtalLibre, vendeur, produit, nbProduit);
@@ -97,6 +107,16 @@ public class Village {
 	
 	public Etal rechercherEtal(Gaulois vendeur) {
 		return marche.trouverVendeur(vendeur);
+	}
+	
+	public String partirVendeur(Gaulois vendeur) {
+		return marche.trouverVendeur(vendeur).libererEtal();
+	}
+	
+	public String afficherMarche() {
+		StringBuilder chaine = new StringBuilder();
+		chaine.append("Le marché du village \"" + nom + "\" possède plusieurs étals :\n" + marche.afficherMarche());
+		return chaine.toString();
 	}
 	
 	
