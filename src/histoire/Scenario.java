@@ -1,5 +1,6 @@
 package histoire;
 
+import exceptions.VillageSansChefException;
 import personnages.Chef;
 import personnages.Druide;
 import personnages.Gaulois;
@@ -8,7 +9,7 @@ import villagegaulois.Village;
 
 public class Scenario {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalArgumentException, IllegalStateException, VillageSansChefException {
 		Village village = new Village("le village des irréductibles", 10, 5);
 		Chef abraracourcix = new Chef("Abraracourcix", 10, village);
 		village.setChef(abraracourcix);
@@ -24,7 +25,11 @@ public class Scenario {
 		village.ajouterHabitant(obelix);
 		village.ajouterHabitant(druide);
 		village.ajouterHabitant(abraracourcix);
-		village.afficherVillageois();
+		try {
+			System.out.println(village.afficherVillageois());
+		} catch (VillageSansChefException e) {
+			e.printStackTrace();
+		}
 
 		System.out.println(village.installerVendeur(bonemine, "fleurs", 20));
 		System.out.println(village.installerVendeur(assurancetourix, "lyres", 5));
@@ -34,9 +39,22 @@ public class Scenario {
 		System.out.println(village.rechercherVendeursProduit("fleurs"));
 		
 		Etal etalFleur = village.rechercherEtal(bonemine);
-		System.out.println(etalFleur.acheterProduit(10, abraracourcix));
-		System.out.println(etalFleur.acheterProduit(15, obelix));
-		System.out.println(etalFleur.acheterProduit(15, assurancetourix));
+
+		try {
+			System.out.println(etalFleur.acheterProduit(10, abraracourcix));
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			e.printStackTrace();
+		}
+		try {
+			System.out.println(etalFleur.acheterProduit(15, obelix));
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			e.printStackTrace();
+		}
+		try {
+			System.out.println(etalFleur.acheterProduit(15, assurancetourix));
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println(village.partirVendeur(bonemine));
 		
